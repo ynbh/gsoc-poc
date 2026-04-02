@@ -156,7 +156,6 @@ export function buildHostedAppDocument(
       const iframe = document.getElementById("mcp-app");
       const serverUrl = ${serializedServerUrl};
       const initialToolPayload = ${serializedToolPayload};
-      let modelContext = null;
       iframe.srcdoc = ${serializedAppHtml};
 
       function postToolPayload() {
@@ -267,7 +266,6 @@ export function buildHostedAppDocument(
           }
 
           if (payload.method === "ui/update-model-context") {
-            modelContext = payload.params ?? null;
             postJsonRpcResult(event.source, payload.id, { acknowledged: true });
             return;
           }

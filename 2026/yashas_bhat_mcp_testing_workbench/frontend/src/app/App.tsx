@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { Activity, Circle, Loader2, Play, PlugZap } from "lucide-react"
 
 import {
@@ -67,11 +67,8 @@ function App() {
   const [selectedMcpTraceIndex, setSelectedMcpTraceIndex] = useState(0)
   const [selectedAppTraceIndex, setSelectedAppTraceIndex] = useState(0)
 
-  const selectedResult = useMemo(
-    () => getSelectedScenarioResult(report, selectedScenarioResultId),
-    [report, selectedScenarioResultId],
-  )
-  const appEntries = useMemo(() => buildAppEntries(discovery), [discovery])
+  const selectedResult = getSelectedScenarioResult(report, selectedScenarioResultId)
+  const appEntries = buildAppEntries(discovery)
   const selectedAppEntry =
     appEntries[Math.min(selectedAppIndex, Math.max(appEntries.length - 1, 0))] ?? null
   const selectedAppDraft = selectedAppEntry ? appDrafts[selectedAppEntry.key] ?? {} : {}
