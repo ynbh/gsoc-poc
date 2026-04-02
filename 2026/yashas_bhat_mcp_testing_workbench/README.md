@@ -1,6 +1,6 @@
 # MCP Testing Workbench
 
-HTTP MCP workbench with:
+HTTP MCP workbench for:
 
 - live HTTP MCP discovery
 - tool and resource inspection
@@ -8,6 +8,8 @@ HTTP MCP workbench with:
 - TypeScript-backed scenario suites
 - trace capture
 - a browser-backed MCP Apps harness
+
+The repo does not include the Sales Analytics MCP server itself. It includes a bundled scenario suite for testing that server.
 
 ## Requirements
 
@@ -28,6 +30,7 @@ npx playwright install chromium
 - The HTTP client targets Streamable HTTP MCP servers. It does not yet implement the legacy 2024-11-05 HTTP+SSE compatibility path.
 - Authenticated MCP servers are not supported yet.
 - MCP Apps preview in the UI is a lightweight host bridge. The deeper host-flow validation runs through the runner harness.
+- For the bundled Sales Analytics demo suite, the reference MCP server is expected to be running at `http://localhost:3000/mcp`.
 
 ## Install
 
@@ -57,6 +60,36 @@ npm run typecheck
 npm run lint
 npm run build
 ```
+
+## UI Capabilities
+
+The web UI can:
+
+- connect to an HTTP MCP endpoint through the runner API
+- load server info, tools, resources, and MCP App surfaces
+- call tools and inspect raw responses
+- preview MCP App resources with a lightweight host bridge
+- list available scenario suites and run them
+- inspect saved runs, assertions, and traces
+
+## Runner Capabilities
+
+The runner can:
+
+- initialize and talk to Streamable HTTP MCP servers
+- expose discovery, resource-read, tool-call, and run endpoints
+- execute TypeScript-backed scenario suites
+- record reports, assertions, step timing, and artifacts
+- run browser-backed MCP Apps checks through Playwright
+
+To use the runner with an MCP server:
+
+1. Start the target HTTP MCP server.
+2. Start this workbench with `npm run dev`, or use the runner API directly.
+3. Pass the MCP endpoint as `serverUrl`.
+4. Use discovery to inspect the server.
+5. Use tool/resource endpoints for manual inspection.
+6. Use the run endpoint to execute scenario suites against that server.
 
 ## Runner API
 
@@ -178,9 +211,7 @@ flowchart LR
 
 ### Frontend
 
-Location:
-
-- [frontend](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/frontend)
+Location: [frontend](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/frontend)
 
 Responsibilities:
 
@@ -192,9 +223,7 @@ Responsibilities:
 
 ### Runner
 
-Location:
-
-- [runner](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/runner)
+Location: [runner](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/runner)
 
 Responsibilities:
 
@@ -211,15 +240,6 @@ Key parts:
 - [runner/src/runner/scenario-runner.ts](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/runner/src/runner/scenario-runner.ts)
 - [runner/src/apps-harness/mcp-apps-harness.ts](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/runner/src/apps-harness/mcp-apps-harness.ts)
 - [runner/src/server/app.ts](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/runner/src/server/app.ts)
-
-To use the runner with an MCP server:
-
-1. Start the target HTTP MCP server.
-2. Point the UI at its MCP endpoint, or call the runner API directly with `serverUrl`.
-3. Use `/api/discovery` to load server info, tools, and resources.
-4. Use `/api/tools/call` to invoke tools.
-5. Use `/api/resource` to inspect returned resources.
-6. Use `/api/run` to execute scenario suites against that server.
 
 ```mermaid
 sequenceDiagram
@@ -247,9 +267,7 @@ sequenceDiagram
 
 ### Storage
 
-Saved artifacts go under:
-
-- [traces](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/traces)
+Saved artifacts go under [traces](/Users/yashasbhat/Documents/gsoc/gsoc-poc/2026/yashas_bhat_mcp_testing_workbench/traces).
 
 This includes:
 
@@ -266,23 +284,6 @@ This includes:
 - no persistent connection profiles
 - no UI authoring for scenario files yet
 - MCP Apps preview in the UI is lighter than the Playwright harness
-
-## UI Capabilities
-
-- connect to an HTTP MCP server
-- inspect server discovery data
-- browse tools, resources, and MCP Apps
-- invoke app-backed tools and preview their UI resources
-- inspect raw responses
-- browse scenario suites, run reports, and saved traces
-
-## Runner Capabilities
-
-- initialize and talk to an HTTP MCP server over Streamable HTTP
-- record MCP transport traces and host-app traces
-- execute TypeScript-backed scenario suites
-- resolve scenario dependencies
-- expose discovery, tool call, resource read, run report, and trace APIs to the frontend
 
 ## Bundled Demo
 
